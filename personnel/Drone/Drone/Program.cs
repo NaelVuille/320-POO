@@ -9,33 +9,57 @@ namespace Drone
 {
     internal class Program
     {
+        
+
         static void Main(string[] args)
         {
             //déclaration constante
-            const int posy = 10;//position y du drone
+            const int posy = 0;//position y du drone
 
             //déclaration variable
             int posx = 0;//position x du drone
             int bat = 50;//pourcentage de la battrie
 
-            //boucle de l'action
+            //boucle du drone qui avance
             do
             {
                 Console.Clear();
-                Console.SetCursorPosition(posx, posy);
-                Console.WriteLine("x-O-x");
-                posx += 1;
-                bat -= 2;
-
+                Etat(ref posx, ref bat);
+                Drone(ref posx, ref bat, posy);
                 Thread.Sleep(150);
             } while (bat > 0);
 
+            //affiche le drone mort
             Console.Clear();
-            Console.SetCursorPosition(posx, posy);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("_____");
+            Drone(ref posx, ref bat, posy);
             Console.ReadLine();
 
+        }
+        //Etat du drone
+        static void Etat (ref int posx, ref int bat)
+        {
+            if (bat > 0) { 
+                posx += 1;
+                bat -= 2;
+            }
+        }
+        //dessin du drone
+        static void Drone(ref int posx,ref int bat,int posy)
+        {
+            
+            Console.SetCursorPosition(posx, posy);
+            if (bat > 0)
+            {
+                Console.WriteLine("x-O-x");
+        
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("_____");
+            }
+            Console.SetCursorPosition(posx+1, posy+1);
+            Console.WriteLine(bat + "%");
         }
     }
 }
