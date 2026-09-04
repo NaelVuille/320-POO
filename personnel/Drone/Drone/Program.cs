@@ -17,8 +17,8 @@ namespace Drone
             const int posy = 0;//position y du drone
 
             //déclaration variable
-            int posx = 0;//position x du drone
             int nb_drone = 20;
+            int[] posx = new int[nb_drone];//position x du drone
             int[] bat = new int[nb_drone];//pourcentage de la battrie
             Random random = new Random();
 
@@ -39,40 +39,37 @@ namespace Drone
                 Thread.Sleep(150);
             } while (1 > 0);
 
-            //affiche le drone mort
-            Console.Clear();
-            Drone(ref posx, ref bat, posy,nb_drone);
-            Console.ReadLine();
-
         }
         //Etat du drone
-        static void Etat (ref int posx, ref int[] bat)
+        static void Etat (ref int[] posx, ref int[] bat)
         {
-            for (int i = 0; ; i++) { 
-                if (bat[i] > 0) { 
-                    posx += 1;
+            for (int i = 0;i < 20 ; i++) { 
+                if (bat[i] > 0) {
+                    posx[i] += 1;
                     bat[i] -= 2;
                 }
             }
         }
         //dessin du drone
-        static void Drone(ref int posx,ref int[] bat,int posy,int nb_drone)
+        static void Drone(ref int[] posx,ref int[] bat,int posy,int nb_drone)
         {
             for (int i = 0; i < nb_drone; i++)
             {
-                Console.SetCursorPosition(posx, posy+i);
+                Console.SetCursorPosition(posx[i], posy+i);
                 if (bat[i] > 0)
                 {
-                    Console.WriteLine("x-O-x");
-
+                    Console.Write("x-");
+                    Console.Write(bat[i] + "%");
+                    Console.Write("-x");
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("_____");
+                    Console.Write("_____");
+                    Console.ForegroundColor= ConsoleColor.White;
                 }
-                Console.SetCursorPosition(posx + 1, posy + i);
-                Console.WriteLine(bat[i] + "%");
+                
+                
             }
         }
     }
