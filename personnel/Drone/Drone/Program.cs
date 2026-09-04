@@ -13,10 +13,21 @@ namespace Drone
 
         static void Main(string[] args)
         {
-            int nb_drone = 20;
-            Drone drone = new Drone();
+            Console.CursorVisible = false;
 
-            drone.move();
+            Drone[] drones = new Drone[2];
+
+            for (int i = 0; i < drones.Length-1; i++)
+            {
+                while (drones[i].Batterie > 1)
+                {
+                    Console.Clear();
+                    drones[i].change();
+                    drones[i].Draw();
+                    Thread.Sleep(150);
+
+                }
+            }
             
             Console.ReadKey();
         }

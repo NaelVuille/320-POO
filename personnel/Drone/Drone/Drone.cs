@@ -13,31 +13,33 @@ namespace Drone
         //Properties
         private int _posx;
         private int _posy;
-        public int Batterie;
+        private int _batterie;
+
+        public int Batterie { get => _batterie; }
 
         public Drone(int posx, int posy, int batterie)
         {
             this._posx = posx;
             this._posy = posy;
-            this.Batterie = batterie;
+            this._batterie = batterie;
         }
 
         public Drone()
         {
             this._posx = 0;
             this._posy = 0;
-            this.Batterie = 50;
+            this._batterie = 50;
         }
 
-        private void change()
+        public void change()
         {
-            if (Batterie > 0)
-            {
-                _posx += 1;
-                Batterie -= 2;
-            }
+            if (Batterie <= 0) return;
+
+            _posx++;
+            _batterie -= 2;
+
         }
-        private void Draw()
+        public void Draw()
         {
             Console.SetCursorPosition(_posx, _posy);
             if (Batterie > 0)
@@ -51,18 +53,6 @@ namespace Drone
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("_____");
                 Console.ForegroundColor = ConsoleColor.White;
-            }
-        }
-        
-        public void move()
-        {
-            while (this.Batterie > 1)
-            {
-                Console.Clear();
-                this.change();
-                this.Draw();
-                Thread.Sleep(150);
-
             }
         }
     }
