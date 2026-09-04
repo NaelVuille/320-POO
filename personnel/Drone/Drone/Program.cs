@@ -17,33 +17,33 @@ namespace Drone
             const int posy = 0;//position y du drone
 
             //déclaration variable
-            int nb_drone = 20;
+            int nb_drone = 25;
             int[] posx = new int[nb_drone];//position x du drone
             int[] bat = new int[nb_drone];//pourcentage de la battrie
             Random random = new Random();
 
-            for(int i = 0;i < nb_drone-1; i++)
+            var Drone = new Drone();
+
+            for(int i = 0;i < nb_drone; i++)
             {
                 bat[i] = random.Next(2, 100);
             }
             
 
-
-
             //boucle du drone qui avance
             do
             {
                 Console.Clear();
-                Etat(ref posx, ref bat);
-                Drone(ref posx, ref bat, posy,nb_drone);
+                Etat(ref posx, ref bat, nb_drone);
+                DrawDrone(ref posx, ref bat, posy,nb_drone);
                 Thread.Sleep(150);
             } while (1 > 0);
 
         }
         //Etat du drone
-        static void Etat (ref int[] posx, ref int[] bat)
+        static void Etat (ref int[] posx, ref int[] bat,int nb_drone)
         {
-            for (int i = 0;i < 20 ; i++) { 
+            for (int i = 0;i < nb_drone ; i++) { 
                 if (bat[i] > 0) {
                     posx[i] += 1;
                     bat[i] -= 2;
@@ -51,7 +51,7 @@ namespace Drone
             }
         }
         //dessin du drone
-        static void Drone(ref int[] posx,ref int[] bat,int posy,int nb_drone)
+        static void DrawDrone(ref int[] posx,ref int[] bat,int posy,int nb_drone)
         {
             for (int i = 0; i < nb_drone; i++)
             {
