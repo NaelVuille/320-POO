@@ -8,17 +8,20 @@ namespace Drones
     {
         private int _charge;                            // La charge actuelle de la batterie
         private string _name;                           // Un nom
-        private int _x;                                 // Position en X depuis la gauche de l'espace aérien
-        private int _y;                                 // Position en Y depuis le haut de l'espace aérien
+        private float _x;                                 // Position en X depuis la gauche de l'espace aérien
+        private float _y;                                 // Position en Y depuis le haut de l'espace aérien
+        private int _targetX;
+        private int _targetY;
 
         // Constructeur
         public Drone(int x, int y, string name)
         {
-            
+            this._targetX = RandomHelpers.alea.Next(ConfigHelpers.AIRSPACE_WIDTH);
+            this._targetY = RandomHelpers.alea.Next(ConfigHelpers.AIRSPACE_HEIGHT);
             this._x = x;
             this._y = y;
             this._name = name;
-            _charge = RandomHelpers.alea.Next(ConfigHelpers.MAX_LOAD); // La charge initiale de la batterie est choisie aléatoirement
+            this._charge = RandomHelpers.alea.Next(ConfigHelpers.MAX_LOAD); // La charge initiale de la batterie est choisie aléatoirement
         }
 
         #region ================ Modelisation du drone et de son comportement ================
@@ -28,9 +31,14 @@ namespace Drones
         public void Update(int interval)
         {
             if (_charge <= 0) return;                     // S'il n'a plus de charge, il ne peut plus bouger
-            _x += 2;                                    // Il s'est déplacé de 2 pixels vers la droite
-            _y += RandomHelpers.alea.Next(-2,3);                     // Il s'est déplacé d'une valeur aléatoire vers le haut ou le bas
-            _charge--;                                  // Il a dépensé de l'énergie
+            _x += (int)(deltaX / distance * step);
+            _y += (int)(deltaY / distance * step);
+            double deltaX = _targetX - _x;
+            double deltaY = _targetY - _y;
+            double distance = Math.Sqrt(deltaX * deltaXdeltaY * deltaY);
+            double step = (double)ConfigHelpers.SPEED * interval / 1000; // Distance parcourue pendant l'intervalle,vitesse constante
+            
+            _charge--;// Il a dépensé de l'énergie
         }
 
         #endregion

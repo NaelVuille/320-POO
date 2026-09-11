@@ -8,5 +8,8 @@
         public const int AIRSPACE_WIDTH = 1200;
 
         public const int AIRSPACE_HEIGHT = 600;
+
+        public const int SPEED = 1;
+
     }
 }
