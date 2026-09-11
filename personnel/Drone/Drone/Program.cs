@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,23 +16,31 @@ namespace Drone
         {
             Console.CursorVisible = false;
 
-            Drone[] drones = new Drone[2];
+            Drone[] drones = new Drone[] { new Drone(1,1,50),new Drone(1,5,60)};
 
-            for (int i = 0; i < drones.Length-1; i++)
+
+            while (OneIsAlive (drones))
             {
-                while (drones[i].Batterie > 1)
-                {
-                    Console.Clear();
-                    drones[i].change();
-                    drones[i].Draw();
-                    Thread.Sleep(150);
-
+                Console.Clear();
+                foreach (Drone drone in drones)
+                {  
+                    drone.change();
+                    drone.Draw();
                 }
+                Thread.Sleep(150);
             }
-            
-            Console.ReadKey();
+        Console.ReadKey();
         }
         
+        static bool OneIsAlive(Drone[] drones)
+        {
+            foreach (Drone drone in drones)
+            {
+                if(drone.Batterie > 1)
+                return true;
+            }
+            return false;
+        }
 
     }
 }
