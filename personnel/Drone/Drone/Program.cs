@@ -16,6 +16,8 @@ namespace Drone
         {
             Console.CursorVisible = false;
 
+            int Count = 0;
+
             List<Drone> drones = new List<Drone> { 
                 new Drone(1,1,50),
                 new Drone(1,5,60)
@@ -31,6 +33,10 @@ namespace Drone
                     drone.Draw();
                 }
                 Thread.Sleep(150);
+
+                Count++;
+                if (Count == 10)
+                    drones.Add(new Drone(1, 3, 70));
             }
         Console.ReadKey();
         }
