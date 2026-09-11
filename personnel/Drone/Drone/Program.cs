@@ -38,7 +38,7 @@ namespace Drone
                 if (Count == 10) 
                 { 
                     drones.Add(new Drone(1, 20, 100));
-                    Count = 0;
+                  
                 }
             }
         Console.ReadKey();
