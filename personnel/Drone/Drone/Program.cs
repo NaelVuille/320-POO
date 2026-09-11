@@ -16,7 +16,10 @@ namespace Drone
         {
             Console.CursorVisible = false;
 
-            Drone[] drones = new Drone[] { new Drone(1,1,50),new Drone(1,5,60)};
+            List<Drone> drones = new List<Drone> { 
+                new Drone(1,1,50),
+                new Drone(1,5,60)
+            };
 
 
             while (OneIsAlive (drones))
@@ -32,7 +35,7 @@ namespace Drone
         Console.ReadKey();
         }
         
-        static bool OneIsAlive(Drone[] drones)
+        static bool OneIsAlive(List<Drone> drones)
         {
             foreach (Drone drone in drones)
             {
