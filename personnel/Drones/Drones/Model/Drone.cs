@@ -1,6 +1,7 @@
 ﻿using Drones.Helpers;
 using Drones.Properties;
 using System.Drawing.Text;
+using Drones;
 
 namespace Drones
 {
@@ -41,7 +42,14 @@ namespace Drones
         // que 'interval' millisecondes se sont écoulées
         public void Update(int interval)
         {
-            if (_charge <= 0) return;                     // S'il n'a plus de charge, il ne peut plus bouger
+            if (_charge <= 0) state = State.CRASH;
+            if (_charge <= 100 && _charge > 0) state = State.LOW_BATTERY;
+            if (state == State.CRASH || state == State.LOADING) return;                     // S'il n'a plus de charge ou si il charge, il ne peut plus bouger
+
+            if(state == State.LOW_BATTERY) {
+                _targetX = 0;
+                _targetY = 0;
+            }
 
             double distance = MathHelpers.Distance(_x, _y, _targetX, _targetY);
 

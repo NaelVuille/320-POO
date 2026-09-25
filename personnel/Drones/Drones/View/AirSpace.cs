@@ -1,3 +1,5 @@
+using Drones.Model;
+
 namespace Drones
 {
     // La classe AirSpace repr�sente le territoire au dessus duquel les drones peuvent voler
@@ -8,12 +10,13 @@ namespace Drones
     {
         // La flotte est l'ensemble des drones qui �voluent dans notre espace a�rien
         private List<Drone> _fleet;
+        private List<Charger> _borne;
 
         private BufferedGraphicsContext _currentContext;
         private BufferedGraphics _airspace;
 
         // Initialisation de l'espace a�rien avec un certain nombre de drones
-        public AirSpace(List<Drone> fleet)
+        public AirSpace(List<Drone> fleet, List<Charger> borne)
         {
             InitializeComponent();
             this.ClientSize = new Size(Config.AIRSPACE_WIDTH, Config.AIRSPACE_HEIGHT);
@@ -23,6 +26,7 @@ namespace Drones
             // dimensions the same size as the drawing surface of the form.
             _airspace = _currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
             _fleet = fleet;
+            _borne = borne;
         }
 
         // Affichage de la situation actuelle
@@ -35,7 +39,10 @@ namespace Drones
             {
                 drone.Render(_airspace);
             }
-
+            foreach (Charger charger in _borne) 
+            { 
+                charger.Render(_airspace);
+            }
             _airspace.Render();
         }
 
