@@ -18,7 +18,7 @@ namespace Drones
             List<Drone> fleet= new List<Drone>();
             List<Charger> borne = new List<Charger>();
             
-            for(int i=0; i < 5;i++)
+            for(int i=0; i < 1;i++)
             fleet.Add(new Drone(Config.AIRSPACE_WIDTH / 2, Config.AIRSPACE_HEIGHT / 2, "l'étiquette de l'étiqutteuse"));
             
             borne.Add(new Charger(Config.AIRSPACE_WIDTH / 2, Config.AIRSPACE_HEIGHT / 2));

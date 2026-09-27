@@ -51,7 +51,7 @@ namespace Drones
         {
             foreach (Drone drone in _fleet)
             {
-                drone.Update(interval);
+                drone.Update(interval,_borne);
             }
         }
 

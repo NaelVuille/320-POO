@@ -2,11 +2,12 @@
 using Drones.Properties;
 using System.Drawing.Text;
 using Drones;
+using Drones.Model;
 
 namespace Drones
 {
     // Cette partie de la classe Drone définit ce qu'est un drone par un modèle numérique
-    public partial class Drone
+    public partial class Drone 
     {
         private int _charge;                          // La charge actuelle de la batterie
         private string _name;                         // Un nom
@@ -31,24 +32,26 @@ namespace Drones
             (_targetX, _targetY) = newtarget();
         }
 
-        private (int,int) newtarget()
+        private (int, int) newtarget()
         {
-            return (RandomHelpers.Next(Config.AIRSPACE_WIDTH),RandomHelpers.Next(Config.AIRSPACE_HEIGHT));
+            return (RandomHelpers.Next(Config.AIRSPACE_WIDTH), RandomHelpers.Next(Config.AIRSPACE_HEIGHT));
         }
 
         #region ================ Modelisation du drone et de son comportement ================
 
         // Cette méthode calcule le nouvel état dans lequel le drone se trouve après
         // que 'interval' millisecondes se sont écoulées
-        public void Update(int interval)
+        public void Update(int interval,List<Charger> borne)
         {
             if (_charge <= 0) state = State.CRASH;
-            if (_charge <= 100 && _charge > 0) state = State.LOW_BATTERY;
-            if (state == State.CRASH || state == State.LOADING) return;                     // S'il n'a plus de charge ou si il charge, il ne peut plus bouger
+            if (_charge <= 150 && _charge > 0 && state != State.LOADING) state = State.LOW_BATTERY;
+            if (state == State.CRASH) return;                     // S'il n'a plus de charge ou si il charge, il ne peut plus bouger
 
-            if(state == State.LOW_BATTERY) {
-                _targetX = 0;
-                _targetY = 0;
+            if (state == State.LOW_BATTERY)
+            {
+                _targetX = borne[0].X;
+                _targetY = borne[0].Y;
+
             }
 
             double distance = MathHelpers.Distance(_x, _y, _targetX, _targetY);
@@ -57,15 +60,27 @@ namespace Drones
             {
                 _x = _targetX;
                 _y = _targetY;
-                (_targetX, _targetY) = newtarget();         //le drone définis un nouvelle objectif
+
+                if(state==State.LOW_BATTERY) state = State.LOADING;
+
+                if (state == State.LOADING)
+                {
+                    _charge += 10;
+                    if (_charge > Config.MAX_LOAD) _charge = Config.MAX_LOAD;
+                    if (_charge >= Config.MAX_LOAD) state = State.ROAMING;
+                }
+                else
+                {
+                    (_targetX, _targetY) = newtarget();         //le drone définis un nouvelle objectif
+                }
                 return;
             }
 
             // Déplacement le long du vecteur unitaire vers l'objectif, à la vitesse du drone
             double dx = _targetX - _x;
             double dy = _targetY - _y;
-            _x += (int)(dx / distance * Config.SPEED * interval/1000);
-            _y += (int)(dy / distance * Config.SPEED * interval/1000);
+            _x += (int)(dx / distance * Config.SPEED * interval / 1000);
+            _y += (int)(dy / distance * Config.SPEED * interval / 1000);
             _charge--;                                    // Il a dépensé de l'énergie
         }
 
@@ -79,8 +94,8 @@ namespace Drones
         // De manière graphique
         public void Render(BufferedGraphics drawingSpace)
         {
-            drawingSpace.Graphics.DrawImage(_charge > 0 ? Resources.drone : Resources.boom, _x-SIZE/2, _y-SIZE/2, SIZE, SIZE);
-            drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, _x-SIZE/2, _y-SIZE);
+            drawingSpace.Graphics.DrawImage(_charge > 0 ? Resources.drone : Resources.boom, _x - SIZE / 2, _y - SIZE / 2, SIZE, SIZE);
+            drawingSpace.Graphics.DrawString($"{this}", TextHelpers.drawFont, TextHelpers.writingBrush, _x - SIZE / 2, _y - SIZE);
         }
 
         // De manière textuelle

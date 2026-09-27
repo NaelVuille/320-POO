@@ -17,7 +17,7 @@ namespace Drones.Model
         {
             get
             {
-                return X;
+                return _x;
             }
         }
 
