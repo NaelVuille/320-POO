@@ -26,12 +26,27 @@ namespace Drones
             
             bornes.Add(new Charger(Config.AIRSPACE_WIDTH / 2, Config.AIRSPACE_HEIGHT / 2));
 
-            for (int i = 0; i < 5; i++)
-                pizzerias.Add(new Pizzeria(Helpers.RandomHelpers.Next(Helpers.ConfigHelpers.PIZZARIAS_SIZE/2,Config.AIRSPACE_WIDTH), Helpers.RandomHelpers.Next(Helpers.ConfigHelpers.PIZZARIAS_SIZE / 2, Config.AIRSPACE_HEIGHT), "Pizzeria numéro " + i));
+            for (int i = 0; i < 5; i++) { 
+                try
+                {
+                    Pizzeria.RegisterPizzeria(pizzerias, i, bornes);
+                }
+                catch
+                { 
+                    i--; 
+                }
+            }
 
             for (int i = 0; i < 20; i++)
             {
-                clients.Add(new Client(Helpers.RandomHelpers.Next(Helpers.ConfigHelpers.CLIENTS_SIZE / 2, Config.AIRSPACE_WIDTH), Helpers.RandomHelpers.Next(Helpers.ConfigHelpers.CLIENTS_SIZE / 2, Config.AIRSPACE_HEIGHT), "clients numéro " + i));
+                try
+                {
+                    Client.RegisterClient(clients, i, pizzerias,bornes);
+                }
+                catch
+                {
+                    i--;
+                }
             }
 
             // D�marrage
