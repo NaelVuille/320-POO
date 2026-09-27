@@ -10,13 +10,15 @@ namespace Drones
     {
         // La flotte est l'ensemble des drones qui �voluent dans notre espace a�rien
         private List<Drone> _fleet;
-        private List<Charger> _borne;
+        private List<Charger> _bornes;
+        private List<Pizzeria> _pizzerias;
+        private List<Client> _clients;
 
         private BufferedGraphicsContext _currentContext;
         private BufferedGraphics _airspace;
 
         // Initialisation de l'espace a�rien avec un certain nombre de drones
-        public AirSpace(List<Drone> fleet, List<Charger> borne)
+        public AirSpace(List<Drone> fleet, List<Charger> bornes, List<Pizzeria> pizzerias, List<Client>clients)
         {
             InitializeComponent();
             this.ClientSize = new Size(Config.AIRSPACE_WIDTH, Config.AIRSPACE_HEIGHT);
@@ -26,7 +28,9 @@ namespace Drones
             // dimensions the same size as the drawing surface of the form.
             _airspace = _currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
             _fleet = fleet;
-            _borne = borne;
+            _bornes = bornes;
+            _pizzerias = pizzerias;
+            _clients = clients;
         }
 
         // Affichage de la situation actuelle
@@ -39,10 +43,19 @@ namespace Drones
             {
                 drone.Render(_airspace);
             }
-            foreach (Charger charger in _borne) 
+            foreach (Charger charger in _bornes) 
             { 
                 charger.Render(_airspace);
             }
+            foreach (Pizzeria pizzeria in _pizzerias)
+            {
+                pizzeria.Render(_airspace);
+            }
+            foreach (Client client in _clients)
+            {
+                client.Render(_airspace);
+            }
+
             _airspace.Render();
         }
 
@@ -51,7 +64,7 @@ namespace Drones
         {
             foreach (Drone drone in _fleet)
             {
-                drone.Update(interval,_borne);
+                drone.Update(interval,_bornes);
             }
         }
 
