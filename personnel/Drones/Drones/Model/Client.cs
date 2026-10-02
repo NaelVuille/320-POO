@@ -12,6 +12,7 @@ namespace Drones.Model
         private int _y;
         private string _nom;
         private const int _SIZE = Helpers.ConfigHelpers.CLIENTS_SIZE;
+        private const int _HALFSIZE = _SIZE / 2;
         public Client(int x, int y, string nom)
         {
             this._x = x;
@@ -20,18 +21,18 @@ namespace Drones.Model
         }
         public void Render(BufferedGraphics drawingSpace)
         {
-            drawingSpace.Graphics.FillRectangle(Brushes.Green, _x - _SIZE / 2, _y - _SIZE / 2, _SIZE, _SIZE);
+            drawingSpace.Graphics.FillRectangle(Brushes.Green, _x - _HALFSIZE, _y - _HALFSIZE, _SIZE, _SIZE);
         }
         public static void RegisterClient(List<Client> clients, int i, List<Pizzeria> pizzerias, List<Charger> bornes)
         {
-            int Size = Helpers.ConfigHelpers.CLIENTS_SIZE / 2;
-            int x = Helpers.RandomHelpers.Next(Size, Config.AIRSPACE_WIDTH - Size);
-            int y = Helpers.RandomHelpers.Next(Size, Config.AIRSPACE_HEIGHT - Size);
+            int securityDistance = _HALFSIZE;
+            int x = Helpers.RandomHelpers.Next(_HALFSIZE, Config.AIRSPACE_WIDTH - _HALFSIZE);
+            int y = Helpers.RandomHelpers.Next(_HALFSIZE, Config.AIRSPACE_HEIGHT - _HALFSIZE);
 
             foreach (Pizzeria pizzeria in pizzerias)
             {
-                Size = Helpers.ConfigHelpers.PIZZARIAS_SIZE / 2;
-                if ((x + Size >= pizzeria.x - Size && x - Size <= pizzeria.x + Size) && (y + Size >= pizzeria.y - Size && y - Size <= pizzeria.y + Size))
+                securityDistance = Helpers.ConfigHelpers.PIZZARIAS_SIZE / 2;
+                if ((x + securityDistance >= pizzeria.x - securityDistance && x - securityDistance <= pizzeria.x + securityDistance) && (y + securityDistance >= pizzeria.y - securityDistance && y - securityDistance <= pizzeria.y + securityDistance))
                 {
                     throw new Exception("Chevauchement d'un client sur une pizzeria");
                 }
@@ -40,8 +41,8 @@ namespace Drones.Model
 
             foreach (Client client in clients)
             {
-                Size = (Helpers.ConfigHelpers.CLIENTS_SIZE / 2) * 5;
-                if ((x + Size >= client._x - Size && x - Size <= client._x + Size) && (y + Size >= client._y - Size && y - Size <= client._y + Size))
+                securityDistance = (_HALFSIZE) * 5;
+                if ((x + securityDistance >= client._x - securityDistance && x - securityDistance <= client._x + securityDistance) && (y + securityDistance >= client._y - securityDistance && y - securityDistance <= client._y + securityDistance))
                 {
                     throw new Exception("Distance clients");
                 }
@@ -49,7 +50,7 @@ namespace Drones.Model
 
             foreach (Charger borne in bornes)
             {
-                if ((x + Size >= borne.X - Size && x - Size <= borne.X + Size) && (y + Size >= borne.Y - Size && y - Size <= borne.Y + Size))
+                if ((x + securityDistance >= borne.X - securityDistance && x - securityDistance <= borne.X + securityDistance) && (y + securityDistance >= borne.Y - securityDistance && y - securityDistance <= borne.Y + securityDistance))
                 {
                     throw new Exception("Chevauchement d'un client sur une borne de charge");
                 }

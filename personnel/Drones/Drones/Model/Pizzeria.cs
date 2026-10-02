@@ -12,6 +12,7 @@ namespace Drones.Model
         public int y;
         private string _nom;
         private const int _SIZE = Helpers.ConfigHelpers.PIZZARIAS_SIZE;
+        private const int _HALFSIZE = _SIZE / 2;
         public Pizzeria(int x, int y, string nom) 
         {
             this.x = x;
@@ -21,18 +22,17 @@ namespace Drones.Model
         public void Render(BufferedGraphics drawingSpace)
         {
             Pen pen = new Pen(Color.Gray, 3);
-            drawingSpace.Graphics.DrawRectangle(pen, x - _SIZE / 2, y - _SIZE / 2, _SIZE, _SIZE);
+            drawingSpace.Graphics.DrawRectangle(pen, x - _HALFSIZE, y - _HALFSIZE/ 2, _SIZE, _SIZE);
         }
         public static void RegisterPizzeria(List<Pizzeria> pizzerias, int i,List<Charger> bornes)
         {
-            int Size = Helpers.ConfigHelpers.PIZZARIAS_SIZE / 2;
-            int x = Helpers.RandomHelpers.Next(Size, Config.AIRSPACE_WIDTH - Size);
-            int y = Helpers.RandomHelpers.Next(Size, Config.AIRSPACE_HEIGHT - Size);
+            int x = Helpers.RandomHelpers.Next(_HALFSIZE, Config.AIRSPACE_WIDTH - _HALFSIZE);
+            int y = Helpers.RandomHelpers.Next(_HALFSIZE, Config.AIRSPACE_HEIGHT - _HALFSIZE);
             
 
             foreach (Pizzeria pizzeria in pizzerias)
             {
-                if ((x + Size >= pizzeria.x - Size && x - Size <= pizzeria.x + Size) && (y + Size >= pizzeria.y - Size && y - Size <= pizzeria.y + Size))
+                if ((x + _HALFSIZE >= pizzeria.x - _HALFSIZE && x - _HALFSIZE <= pizzeria.x + _HALFSIZE) && (y + _HALFSIZE >= pizzeria.y - _HALFSIZE && y - _HALFSIZE <= pizzeria.y + _HALFSIZE))
                 {
                     throw new Exception("Chevauchement de pizzerias");
                 }
@@ -40,7 +40,7 @@ namespace Drones.Model
 
             foreach (Charger borne in bornes)
             {
-                if ((x + Size >= borne.X - Size && x - Size <= borne.X + Size) && (y + Size >= borne.Y - Size && y - Size <= borne.Y + Size))
+                if ((x + _HALFSIZE >= borne.X - _HALFSIZE && x - _HALFSIZE <= borne.X + _HALFSIZE) && (y + _HALFSIZE >= borne.Y - _HALFSIZE && y - _HALFSIZE <= borne.Y + _HALFSIZE))
                 {
                     throw new Exception("Chevauchement d'une pizzeria sur une borne de charge");
                 }

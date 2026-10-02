@@ -15,7 +15,7 @@ namespace Drones
         private int _y;                               // Position en Y depuis le haut de l'espace aérien
         private int _targetX;                         // Objectif en X vers lequel le drone se dirige
         private int _targetY;                         // Objectif en Y vers lequel le drone se dirige
-        public State state = State.ROAMING;         // état du drone
+        private State _state = State.ROAMING;         // état du drone
         private int _numero = 0;                      //index d'une des station de charge
 
         public enum State { CRASH, LOW_BATTERY, LOADING, ROAMING } // les différent état du drone
@@ -44,15 +44,15 @@ namespace Drones
         // que 'interval' millisecondes se sont écoulées
         public void Update(int interval, List<Charger> borne)
         {
-            if (_charge <= 0) state = State.CRASH;
-            if (_charge <= 150 && _charge > 0 && state != State.LOADING && state != State.LOW_BATTERY)
+            if (_charge <= 0) _state = State.CRASH;
+            if (_charge <= 150 && _charge > 0 && _state != State.LOADING && _state != State.LOW_BATTERY)
             {
-                state = State.LOW_BATTERY;
+                _state = State.LOW_BATTERY;
                 _numero = Helpers.RandomHelpers.Next(borne.Count);
             }
-            if (state == State.CRASH) return;                     // S'il n'a plus de charge ou si il charge, il ne peut plus bouger
+            if (_state == State.CRASH) return;                     // S'il n'a plus de charge ou si il charge, il ne peut plus bouger
 
-            if (state == State.LOW_BATTERY)
+            if (_state == State.LOW_BATTERY)
             {
 
                 _targetX = borne[_numero].X;
@@ -67,13 +67,13 @@ namespace Drones
                 _x = _targetX;
                 _y = _targetY;
 
-                if (state == State.LOW_BATTERY) state = State.LOADING;
+                if (_state == State.LOW_BATTERY) _state = State.LOADING;
 
-                if (state == State.LOADING)
+                if (_state == State.LOADING)
                 {
                     _charge += 10;
                     if (_charge > Config.MAX_LOAD) _charge = Config.MAX_LOAD;
-                    if (_charge >= Config.MAX_LOAD) state = State.ROAMING;
+                    if (_charge >= Config.MAX_LOAD) _state = State.ROAMING;
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace Drones
         // De manière textuelle
         public override string ToString()
         {
-            return $"{_name} ({((int)((double)_charge / Config.MAX_LOAD * 100)).ToString()}%)";
+            return $"{_state} ({((int)((double)_charge / Config.MAX_LOAD * 100)).ToString()}%)";
         }
         #endregion
 
